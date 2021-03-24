@@ -17,7 +17,6 @@ fcl
 
 
 const magic = new Magic('pk_test_8027A11635E49A34', {
-  endpoint: 'http://localhost:3014',
   extensions: [
     new FlowExtension({
       rpcUrl: 'https://access-testnet.onflow.org'
