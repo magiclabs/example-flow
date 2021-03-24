@@ -16,7 +16,7 @@ fcl
   .put("challenge.handshake", "http://access-001.devnet9.nodes.onflow.org:8000");
 
 
-const magic = new Magic('pk_test_8027A11635E49A34', {
+const magic = new Magic('pk_test_734D28C07F53B09C', {
   extensions: [
     new FlowExtension({
       rpcUrl: 'https://access-testnet.onflow.org'
