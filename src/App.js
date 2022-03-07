@@ -19,7 +19,8 @@ fcl
 const magic = new Magic('pk_live_06D5F65BB9CDD2F0', {
   extensions: [
     new FlowExtension({
-      rpcUrl: 'https://access-testnet.onflow.org'
+      rpcUrl: 'https://access-testnet.onflow.org',
+      network: 'testnet'
     })
   ]
 });
