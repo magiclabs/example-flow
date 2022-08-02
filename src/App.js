@@ -13,7 +13,7 @@ fcl.config().put("accessNode.api", "https://access-testnet.onflow.org");
 // Below is the local environment configuration for the dev-wallet
 fcl
   .config()
-  .put("challenge.handshake", "http://access-001.devnet9.nodes.onflow.org:8000");
+  .put("discovery.wallet", "http://access-001.devnet9.nodes.onflow.org:8000");
 
 
 const magic = new Magic('pk_live_06D5F65BB9CDD2F0', {
@@ -87,6 +87,7 @@ export default function App() {
       }
     `,
         fcl.ref(await getReferenceBlock()),
+        fcl.limit(50),
         fcl.proposer(AUTHORIZATION_FUNCTION),
         fcl.authorizations([AUTHORIZATION_FUNCTION]),
         fcl.payer(AUTHORIZATION_FUNCTION)
