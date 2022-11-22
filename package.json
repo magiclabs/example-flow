@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "@magic-ext/flow": "3.1.0",
-    "@onflow/fcl": "0.0.37",
+    "@onflow/fcl": "1.0.2",
     "@onflow/types": "0.0.3",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
