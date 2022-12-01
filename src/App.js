@@ -9,7 +9,7 @@ fcl.config().put("accessNode.api", "https://rest-testnet.onflow.org");
 
 
 
-const magic = new Magic("pk_live_06D5F65BB9CDD2F0", {
+const magic = new Magic("pk_live_A0518BB95A143BFB", {
   extensions: [
     new FlowExtension({
       rpcUrl: "https://rest-testnet.onflow.org",
@@ -95,22 +95,22 @@ export default function App() {
   };
 
   return (
-      <div className="App">
-        {!isLoggedIn ? (
-            <div className="container">
-              <h1>Please sign up or login</h1>
-              <input
-                  type="email"
-                  name="email"
-                  required="required"
-                  placeholder="Enter your email"
-                  onChange={(event) => {
-                    setEmail(event.target.value);
-                  }}
-              />
-              <button onClick={login}>Send</button>
-            </div>
-        ) : (
+    <div className="App">
+      {!isLoggedIn ? (
+        <div className="container">
+          <h1>Please sign up or login</h1>
+          <input
+            type="email"
+            name="email"
+            required="required"
+            placeholder="Enter your email"
+            onChange={(event) => {
+              setEmail(event.target.value);
+            }}
+          />
+          <button onClick={login}>Send</button>
+        </div>
+      ) : (
             <div>
               <div>
                 <div className="container">
@@ -137,7 +137,7 @@ export default function App() {
                 </button>
               </div>
             </div>
-        )}
-      </div>
+      )}
+    </div>
   );
 }
