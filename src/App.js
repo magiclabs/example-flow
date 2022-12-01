@@ -5,25 +5,17 @@ import { FlowExtension } from "@magic-ext/flow";
 import "./styles.css";
 
 // CONFIGURE ACCESS NODE
-fcl.config().put("accessNode.api", "https://access-testnet.onflow.org");
+fcl.config().put("accessNode.api", "https://rest-testnet.onflow.org");
 
-// CONFIGURE WALLET
-// replace with your own wallets configuration
-// Below is the local environment configuration for the dev-wallet
-fcl
-  .config()
-  .put(
-    "challenge.handshake",
-    "http://access-001.devnet9.nodes.onflow.org:8000"
-  );
+
 
 const magic = new Magic("pk_live_A0518BB95A143BFB", {
   extensions: [
     new FlowExtension({
-      rpcUrl: "https://access-testnet.onflow.org",
-      network: "testnet",
-    }),
-  ],
+      rpcUrl: "https://rest-testnet.onflow.org",
+      network: "testnet"
+    })
+  ]
 });
 
 // CONFIGURE AUTHORIZATION FUNCTION
@@ -62,11 +54,6 @@ export default function App() {
 
   const verify = async () => {
     try {
-      const getReferenceBlock = async () => {
-        const response = await fcl.send([fcl.getLatestBlock()]);
-        const data = await fcl.decode(response);
-        return data.id;
-      };
 
       console.log("SENDING TRANSACTION");
       setVerifying(true);
@@ -84,10 +71,10 @@ export default function App() {
         }
       }
     `,
-        fcl.ref(await getReferenceBlock()),
         fcl.proposer(AUTHORIZATION_FUNCTION),
         fcl.authorizations([AUTHORIZATION_FUNCTION]),
         fcl.payer(AUTHORIZATION_FUNCTION),
+        fcl.limit(9999)
       ]);
       console.log("TRANSACTION SENT");
       console.log("TRANSACTION RESPONSE", response);
@@ -124,32 +111,32 @@ export default function App() {
           <button onClick={login}>Send</button>
         </div>
       ) : (
-        <div>
-          <div>
-            <div className="container">
-              <h1>Current user: {userMetadata.email}</h1>
-              <button onClick={logout}>Logout</button>
+            <div>
+              <div>
+                <div className="container">
+                  <h1>Current user: {userMetadata.email}</h1>
+                  <button onClick={logout}>Logout</button>
+                </div>
+              </div>
+              <div className="container">
+                <h1>Flow address</h1>
+                <div className="info">{publicAddress}</div>
+              </div>
+              <div className="container">
+                <h1>Verify Transaction</h1>
+                {verifying ? (
+                    <div className="sending-status">Verifying Transaction</div>
+                ) : (
+                    ""
+                )}
+                <div className="info">
+                  <div>{message}</div>
+                </div>
+                <button id="btn-deploy" onClick={verify}>
+                  Verify
+                </button>
+              </div>
             </div>
-          </div>
-          <div className="container">
-            <h1>Flow address</h1>
-            <div className="info">{publicAddress}</div>
-          </div>
-          <div className="container">
-            <h1>Verify Transaction</h1>
-            {verifying ? (
-              <div className="sending-status">Verifying Transaction</div>
-            ) : (
-              ""
-            )}
-            <div className="info">
-              <div>{message}</div>
-            </div>
-            <button id="btn-deploy" onClick={verify}>
-              Verify
-            </button>
-          </div>
-        </div>
       )}
     </div>
   );
