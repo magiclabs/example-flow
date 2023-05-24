@@ -9,7 +9,7 @@ fcl.config().put("accessNode.api", "https://rest-testnet.onflow.org");
 
 
 
-const magic = new Magic("pk_live_E8937B09A02CF1F7", {
+const magic = new Magic("pk_live_A0518BB95A143BFB", {
   extensions: [
     new FlowExtension({
       rpcUrl: "https://rest-testnet.onflow.org",
@@ -35,9 +35,8 @@ export default function App() {
     magic.user.isLoggedIn().then(async (magicIsLoggedIn) => {
       setIsLoggedIn(magicIsLoggedIn);
       if (magicIsLoggedIn) {
-        const metadata = await magic.user.getMetadata();
-        console.log(metadata)
-        setPublicAddress(metadata.publicAddress);
+        const { publicAddress } = await magic.user.getMetadata();
+        setPublicAddress(publicAddress);
         setUserMetadata(await magic.user.getMetadata());
       }
     });
