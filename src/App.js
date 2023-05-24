@@ -9,7 +9,7 @@ fcl.config().put("accessNode.api", "https://rest-testnet.onflow.org");
 
 
 
-const magic = new Magic("pk_live_A0518BB95A143BFB", {
+const magic = new Magic("pk_live_E8937B09A02CF1F7", {
   extensions: [
     new FlowExtension({
       rpcUrl: "https://rest-testnet.onflow.org",
@@ -35,8 +35,9 @@ export default function App() {
     magic.user.isLoggedIn().then(async (magicIsLoggedIn) => {
       setIsLoggedIn(magicIsLoggedIn);
       if (magicIsLoggedIn) {
-        const { publicAddress } = await magic.user.getMetadata();
-        setPublicAddress(publicAddress);
+        const metadata = await magic.user.getMetadata();
+        console.log(metadata)
+        setPublicAddress(metadata.publicAddress);
         setUserMetadata(await magic.user.getMetadata());
       }
     });
@@ -50,6 +51,35 @@ export default function App() {
   const logout = async () => {
     await magic.user.logout();
     setIsLoggedIn(false);
+  };
+
+  const purchase = async () => {
+    await magic.nft.purchase({
+      nft: {
+        name: "Test NFT",
+        blockchainNftId: "149939964",
+        contractAddress: "0xe269be5ac12bad24",
+        imageUrl: "https://cdn.shopify.com/s/files/1/0568/1132/3597/files/HWNFT_S4_modular-grid_584x800b.jpg?v=1669157307",
+        network: "flow",
+        platform: "mattel",
+        type: "nft_secondary",
+      },
+      identityPrefill: {
+        firstName: "john",
+        lastName: "doe",
+        dateOfBirth: "1990-01-01",
+        emailAddress: "john.doe@gmail.com",
+        // phone: "1 123-456-7890",
+        address: {
+          street1: "123 Main St",
+          street2: "Apt 1",
+          city: "San Francisco",
+          regionCode: "CA",
+          postalCode: "94103",
+          countryCode: "US",
+        },
+      }
+    });
   };
 
   const verify = async () => {
@@ -135,6 +165,10 @@ export default function App() {
                 <button id="btn-deploy" onClick={verify}>
                   Verify
                 </button>
+              </div>
+              <div className="container">
+                <h1>Purchase NFT</h1>
+                <button onClick={purchase}>Purchase</button>
               </div>
             </div>
       )}
