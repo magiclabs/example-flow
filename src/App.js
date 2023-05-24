@@ -52,6 +52,35 @@ export default function App() {
     setIsLoggedIn(false);
   };
 
+  const purchase = async () => {
+    await magic.nft.purchase({
+      nft: {
+        name: "Test NFT",
+        blockchainNftId: "149939964",
+        contractAddress: "0xe269be5ac12bad24",
+        imageUrl: "https://cdn.shopify.com/s/files/1/0568/1132/3597/files/HWNFT_S4_modular-grid_584x800b.jpg?v=1669157307",
+        network: "flow",
+        platform: "mattel",
+        type: "nft_secondary",
+      },
+      identityPrefill: {
+        firstName: "john",
+        lastName: "doe",
+        dateOfBirth: "1990-01-01",
+        emailAddress: "john.doe@gmail.com",
+        // phone: "1 123-456-7890",
+        address: {
+          street1: "123 Main St",
+          street2: "Apt 1",
+          city: "San Francisco",
+          regionCode: "CA",
+          postalCode: "94103",
+          countryCode: "US",
+        },
+      }
+    });
+  };
+
   const verify = async () => {
     try {
 
@@ -135,6 +164,10 @@ export default function App() {
                 <button id="btn-deploy" onClick={verify}>
                   Verify
                 </button>
+              </div>
+              <div className="container">
+                <h1>Purchase NFT</h1>
+                <button onClick={purchase}>Purchase</button>
               </div>
             </div>
       )}
