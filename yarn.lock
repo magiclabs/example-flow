@@ -1455,10 +1455,10 @@
     "@types/yargs" "^15.0.0"
     chalk "^3.0.0"
 
-"@magic-ext/flow@13.3.0":
-  version "13.3.0"
-  resolved "https://registry.yarnpkg.com/@magic-ext/flow/-/flow-13.3.0.tgz#871d62acc146e88d74e8244f14e0bebea227d407"
-  integrity sha512-4XJPGebykUb/gt84VH8lj2chlAJloaBjZPH6BXX/bDscwZ9b1dq2ikiFztHbW4+yQG3L8Y+Jx/3NfqpHOvhaew==
+"@magic-ext/flow@13.5.0":
+  version "13.5.0"
+  resolved "https://registry.yarnpkg.com/@magic-ext/flow/-/flow-13.5.0.tgz#aef686b74982a48f11e16de63d9fc11721fd615f"
+  integrity sha512-a61k4ASSfuxz4TZekBUoTSrsIf1AXWCtN4yJlvuK4XmnESZ5LtN5sVoBWbe2+0DLS4lUpWLeZoRWgbI3qsiB5w==
 
 "@magic-sdk/commons@^14.3.0":
   version "14.3.0"
