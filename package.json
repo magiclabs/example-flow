@@ -11,7 +11,7 @@
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
     "elliptic": "^6.5.4",
-    "magic-sdk": "^17.1.4",
+    "magic-sdk": "^19.1.0",
     "react": "^16.14.0",
     "react-dom": "^16.14.0",
     "react-scripts": "^3.4.4",

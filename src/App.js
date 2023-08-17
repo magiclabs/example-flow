@@ -53,7 +53,7 @@ export default function App() {
   };
 
   const purchase = async () => {
-    await magic.nft.purchase({
+    const res = await magic.nft.purchase({
       nft: {
         name: "Test NFT",
         blockchainNftId: "149939964",
@@ -63,6 +63,15 @@ export default function App() {
         platform: "mattel",
         type: "nft_secondary",
       },
+    //   nft: {
+    //     "blockchainNftId": "167564431",
+    //     "contractAddress": "0xed16a54ede3fe40e",
+    //     "network": "flow",
+    //     "platform": "mattel",
+    //     "type": "nft_secondary",
+    //     "name": "1970 Chevrolet Chevelle SS #4",
+    //     "imageUrl": "https://cdn.shopify.com/s/files/1/0568/1132/3597/files/HWNFT_S4_modular-grid_584x800b.jpg?v=1669157307"
+    // },
       identityPrefill: {
         firstName: "john",
         lastName: "doe",
@@ -79,6 +88,7 @@ export default function App() {
         },
       }
     });
+    console.log(res);
   };
 
   const verify = async () => {
