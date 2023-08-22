@@ -18,18 +18,15 @@ const magic = new Magic("pk_live_A0518BB95A143BFB", {
   ]
 });
 
-// CONFIGURE AUTHORIZATION FUNCTION
-// replace with your authorization function.
-// const AUTHORIZATION_FUNCTION = fcl.currentUser().authorization;
-const AUTHORIZATION_FUNCTION = magic.flow.authorization;
 
 export default function App() {
   const [email, setEmail] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [publicAddress, setPublicAddress] = useState("");
-  const [verifying, setVerifying] = useState(false);
   const [userMetadata, setUserMetadata] = useState({});
-  const [message, setMessage] = useState("");
+  const [nftId, setNftId] = useState("149939964");
+  const [contractAddress, setContractAddress] = useState("0xe269be5ac12bad24");
+
 
   useEffect(() => {
     magic.user.isLoggedIn().then(async (magicIsLoggedIn) => {
@@ -52,47 +49,36 @@ export default function App() {
     setIsLoggedIn(false);
   };
 
-  const verify = async () => {
-    try {
-
-      console.log("SENDING TRANSACTION");
-      setVerifying(true);
-      var response = await fcl.send([
-        fcl.transaction`
-      transaction {
-        var acct: AuthAccount
-
-        prepare(acct: AuthAccount) {
-          self.acct = acct
-        }
-
-        execute {
-          log(self.acct.address)
-        }
+  const purchase = async () => {
+    const res = await magic.nft.purchase({
+      nft: {
+        name: "Test NFT",
+        blockchainNftId: nftId,
+        contractAddress: contractAddress,
+        imageUrl: "https://cdn.shopify.com/s/files/1/0568/1132/3597/files/HWNFT_S4_modular-grid_584x800b.jpg?v=1669157307",
+        network: "flow",
+        platform: "mattel",
+        type: "nft_secondary",
+      },
+      identityPrefill: {
+        firstName: "john",
+        lastName: "doe",
+        dateOfBirth: "1990-01-01",
+        emailAddress: "john.doe@gmail.com",
+        // phone: "1 123-456-7890",
+        address: {
+          street1: "123 Main St",
+          street2: "Apt 1",
+          city: "San Francisco",
+          regionCode: "CA",
+          postalCode: "94103",
+          countryCode: "US",
+        },
       }
-    `,
-        fcl.proposer(AUTHORIZATION_FUNCTION),
-        fcl.authorizations([AUTHORIZATION_FUNCTION]),
-        fcl.payer(AUTHORIZATION_FUNCTION),
-        fcl.limit(9999)
-      ]);
-      console.log("TRANSACTION SENT");
-      console.log("TRANSACTION RESPONSE", response);
-
-      console.log("WAITING FOR TRANSACTION TO BE SEALED");
-      var data = await fcl.tx(response).onceSealed();
-      console.log("TRANSACTION SEALED", data);
-      setVerifying(false);
-
-      if (data.status === 4 && data.statusCode === 0) {
-        setMessage("Congrats!!! I Think It Works");
-      } else {
-        setMessage(`Oh No: ${data.errorMessage}`);
-      }
-    } catch (error) {
-      console.error("FAILED TRANSACTION", error);
-    }
+    });
+    console.log(res);
   };
+
 
   return (
     <div className="App">
@@ -123,18 +109,11 @@ export default function App() {
                 <div className="info">{publicAddress}</div>
               </div>
               <div className="container">
-                <h1>Verify Transaction</h1>
-                {verifying ? (
-                    <div className="sending-status">Verifying Transaction</div>
-                ) : (
-                    ""
-                )}
-                <div className="info">
-                  <div>{message}</div>
-                </div>
-                <button id="btn-deploy" onClick={verify}>
-                  Verify
-                </button>
+                <h1>NFT ID</h1>
+                <input type="text" id="nftid" value={nftId} onChange={event => setNftId(event.target.value)}/>
+                <h1>Contract Address</h1>
+                <input type="text" id="contractaddress" value={contractAddress} onChange={event => setContractAddress(event.target.value)} />
+                <button onClick={purchase}>Purchase</button>
               </div>
             </div>
       )}
