@@ -9,7 +9,7 @@ fcl.config().put("accessNode.api", "https://rest-testnet.onflow.org");
 
 
 
-const magic = new Magic("pk_live_A0518BB95A143BFB", {
+const magic = new Magic("pk_live_E8937B09A02CF1F7", {
   extensions: [
     new FlowExtension({
       rpcUrl: "https://rest-testnet.onflow.org",
