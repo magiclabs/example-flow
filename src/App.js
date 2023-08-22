@@ -4,7 +4,7 @@ import { Magic } from "magic-sdk";
 import { FlowExtension } from "@magic-ext/flow";
 import "./styles.css";
 
-// CONFIGURE ACCESS NODE
+// CONFIGURE ACCESS NODE.
 fcl.config().put("accessNode.api", "https://rest-testnet.onflow.org");
 
 
