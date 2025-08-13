@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, ChangeEvent } from "react";
 import * as fcl from "@onflow/fcl";
-import { Magic } from "magic-sdk";
+import { Magic, MagicUserMetadata } from "magic-sdk";
 import { FlowExtension } from "@magic-ext/flow";
 import "./styles.css";
 
@@ -19,42 +19,44 @@ const magic = new Magic("pk_live_A0518BB95A143BFB", {
 // CONFIGURE AUTHORIZATION FUNCTION
 // replace with your authorization function.
 // const AUTHORIZATION_FUNCTION = fcl.currentUser().authorization;
-const AUTHORIZATION_FUNCTION = magic.flow.authorization;
+const AUTHORIZATION_FUNCTION = magic.flow.authorization as any;
 
-export default function App() {
-  const [email, setEmail] = useState("");
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [publicAddress, setPublicAddress] = useState("");
-  const [verifying, setVerifying] = useState(false);
-  const [userMetadata, setUserMetadata] = useState({});
-  const [message, setMessage] = useState("");
+const App: React.FC = () => {
+  const [email, setEmail] = useState<string>("");
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+  const [publicAddress, setPublicAddress] = useState<string>("");
+  const [verifying, setVerifying] = useState<boolean>(false);
+  const [userMetadata, setUserMetadata] = useState<MagicUserMetadata | null>(
+    null
+  );
+  const [message, setMessage] = useState<string>("");
 
   useEffect(() => {
-    magic.user.isLoggedIn().then(async (magicIsLoggedIn) => {
+    magic.user.isLoggedIn().then(async (magicIsLoggedIn: boolean) => {
       setIsLoggedIn(magicIsLoggedIn);
       if (magicIsLoggedIn) {
-        const { publicAddress } = await magic.user.getMetadata();
-        setPublicAddress(publicAddress);
-        setUserMetadata(await magic.user.getMetadata());
+        const metadata = await magic.user.getInfo();
+        setPublicAddress(metadata.publicAddress || "");
+        setUserMetadata(metadata);
       }
     });
   }, [isLoggedIn]);
 
-  const login = async () => {
+  const login = async (): Promise<void> => {
     await magic.auth.loginWithMagicLink({ email });
     setIsLoggedIn(true);
   };
 
-  const logout = async () => {
+  const logout = async (): Promise<void> => {
     await magic.user.logout();
     setIsLoggedIn(false);
   };
 
-  const verify = async () => {
+  const verify = async (): Promise<void> => {
     try {
       console.log("SENDING TRANSACTION");
       setVerifying(true);
-      var response = await fcl.send([
+      const response = await fcl.send([
         fcl.transaction`
       transaction {
         var acct: &Account
@@ -77,7 +79,7 @@ export default function App() {
       console.log("TRANSACTION RESPONSE", response);
 
       console.log("WAITING FOR TRANSACTION TO BE SEALED");
-      var data = await fcl.tx(response).onceSealed();
+      const data = await fcl.tx(response.transactionId).onceSealed();
       console.log("TRANSACTION SEALED", data);
       setVerifying(false);
 
@@ -88,7 +90,12 @@ export default function App() {
       }
     } catch (error) {
       console.error("FAILED TRANSACTION", error);
+      setVerifying(false);
     }
+  };
+
+  const handleEmailChange = (event: ChangeEvent<HTMLInputElement>): void => {
+    setEmail(event.target.value);
   };
 
   return (
@@ -99,11 +106,9 @@ export default function App() {
           <input
             type="email"
             name="email"
-            required="required"
+            required
             placeholder="Enter your email"
-            onChange={(event) => {
-              setEmail(event.target.value);
-            }}
+            onChange={handleEmailChange}
           />
           <button onClick={login}>Send</button>
         </div>
@@ -111,7 +116,7 @@ export default function App() {
         <div>
           <div>
             <div className="container">
-              <h1>Current user: {userMetadata.email}</h1>
+              <h1>Current user: {userMetadata?.email}</h1>
               <button onClick={logout}>Logout</button>
             </div>
           </div>
@@ -137,4 +142,6 @@ export default function App() {
       )}
     </div>
   );
-}
+};
+
+export default App;
